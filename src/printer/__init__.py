@@ -2,7 +2,6 @@ import time
 from queue import Queue
 from typing import NamedTuple
 
-import awscrt
 import simplejson as json
 from decouple import config
 from printrun.printcore import printcore

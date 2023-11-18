@@ -6,6 +6,7 @@
 	"python.formatting.autopep8Args": ["--indent-size=2"],
 	"[python]": {
 		"editor.formatOnSave": true,
+		"editor.defaultFormatter": "ms-python.autopep8",
 		"editor.codeActionsOnSave": {
 			"source.organizeImports": true
 		}
