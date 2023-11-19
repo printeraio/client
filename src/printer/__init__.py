@@ -7,7 +7,7 @@ from decouple import config
 from printrun.printcore import printcore
 
 from constants import COMMANDS
-from printer.mqtt_connection import init_mqtt_connection
+from printer.mqtt_connection import QoS, init_mqtt_connection
 from utils import Temperature, parse_temperature
 
 PRINTER_ID = config('PRINTER_ID')
@@ -44,5 +44,6 @@ def init_printer(port: str, baud_rate: str):
       telemetry = telemetry_queue.get()
       print(f"{CLIENT_ID}/{PRINTER_ID}", telemetry)
       mqtt_connection.publish(topic=f"{CLIENT_ID}/{PRINTER_ID}", payload=json.dumps(telemetry, namedtuple_as_object=True),
-                              qos=awscrt.mqtt.QoS.AT_LEAST_ONCE)
+                              qos=QoS.AT_LEAST_ONCE)
     time.sleep(1)
+    # printer <-

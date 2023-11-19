@@ -1,4 +1,5 @@
 import time
+from enum import IntEnum
 
 from decouple import config
 from paho.mqtt import client as mqtt
@@ -6,6 +7,12 @@ from paho.mqtt import client as mqtt
 ca_certs = 'src/certs/ca.pem'
 certfile = 'src/certs/client.pem'
 keyfile = 'src/certs/client.key'
+
+
+class QoS (IntEnum):
+  AT_MOST_ONCE = 0
+  AT_LEAST_ONCE = 1
+  EXACTLY_ONCE = 2
 
 
 def init_mqtt_connection(client_id: str):
@@ -16,10 +23,7 @@ def init_mqtt_connection(client_id: str):
                    tls_version=mqtt.ssl.PROTOCOL_TLSv1_2)
     client.tls_insecure_set(False)
     client.connect(config('MQTT_HOST'), int(config('MQTT_PORT')), 60)
-    for i in range(1, 10):
-      print("Publishing message to topic", 'client/1')
-      client.publish('client/1', "Hello world from MQTT "+str(i))
-      time.sleep(1)
+    return client
 
   except Exception as e:
 
