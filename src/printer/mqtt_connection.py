@@ -1,29 +1,29 @@
-from awscrt import io
-from awsiot import mqtt_connection_builder
-from decouple import config
+import time
+from enum import IntEnum
 
-cert_path = 'src/certs/certificate.pem.crt'
-key_path = 'src/certs/private.pem.key'
-root_ca_path = 'src/certs/aws.pem'
+from decouple import config
+from paho.mqtt import client as mqtt
+
+ca_certs = 'src/certs/ca.pem'
+certfile = 'src/certs/client.pem'
+keyfile = 'src/certs/client.key'
+
+
+class QoS (IntEnum):
+  AT_MOST_ONCE = 0
+  AT_LEAST_ONCE = 1
+  EXACTLY_ONCE = 2
 
 
 def init_mqtt_connection(client_id: str):
+  client = mqtt.Client(client_id=client_id)
   try:
-    event_loop_group = io.EventLoopGroup(1)
-    host_resolver = io.DefaultHostResolver(event_loop_group)
-    client_bootstrap = io.ClientBootstrap(event_loop_group, host_resolver)
-    mqtt_connection = mqtt_connection_builder.mtls_from_path(
-        endpoint=config('ENDPOINT'),
-        cert_filepath=cert_path,
-        pri_key_filepath=key_path,
-        client_bootstrap=client_bootstrap,
-        ca_filepath=root_ca_path,
-        client_id=client_id,
-        clean_session=False,
-        keep_alive_secs=6
-    )
-    future = mqtt_connection.connect()
-    if (future.result()['session_present'] == True):
-      return mqtt_connection
+    client.enable_logger()
+    client.tls_set(ca_certs=ca_certs, certfile=certfile, keyfile=keyfile,
+                   tls_version=mqtt.ssl.PROTOCOL_TLSv1_2)
+    client.tls_insecure_set(False)
+    client.connect(config('MQTT_HOST'), int(config('MQTT_PORT')), 60)
+    return client
+
   except Exception as e:
     print('Connection failed with exception {}'.format(e))
