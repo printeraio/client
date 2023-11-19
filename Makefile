@@ -8,7 +8,7 @@ freeze:
 	pipreqs > requirements.txt --force
 
 dev:
-	nodemon src/main.py
+	nodemon src/__init__.py
 
 run:
-	python3 src/main.py
+	python3 src/__init__.py
