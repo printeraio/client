@@ -17,8 +17,8 @@ class Port(NamedTuple):
 
 BAUD_RATES = [2400, 9600, 19200, 38400, 57600, 115200, 250000, 500000, 1000000]
 PRINTER_CONNECTION_TIMEOUT = 2
-DEFAULT_PORTS = [Port(port='/dev/tty.usbserial-1140', baud_rate=250000,
-                      hardware_id=config('HARDWARE_ID'))]
+DEV_PORTS = [Port(port='/dev/tty.usbserial-1140', baud_rate=250000,
+                  hardware_id=config('HARDWARE_ID'))]
 
 
 def list_ports() -> list[str]:

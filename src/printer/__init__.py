@@ -46,4 +46,3 @@ def init_printer(port: str, baud_rate: str):
       mqtt_connection.publish(topic=f"{CLIENT_ID}/{PRINTER_ID}", payload=json.dumps(telemetry, namedtuple_as_object=True),
                               qos=QoS.AT_LEAST_ONCE)
     time.sleep(1)
-    # printer <-

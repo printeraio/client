@@ -26,5 +26,4 @@ def init_mqtt_connection(client_id: str):
     return client
 
   except Exception as e:
-
     print('Connection failed with exception {}'.format(e))
